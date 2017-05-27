@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<div class="container">
+    <div class="col-md-12 col-md-offset-3">
+        <h3>Minha string com HTML em PDF usando ITextSharp</h3>
+
+        @using (Html.BeginForm("GetPdfFile", "Home", FormMethod.Post, new { id = "pdfForm", @class = "inline-form" }))
+        {
+            <button class="btn btn-primary m-t-10" type="button" onclick="$('#pdfForm').submit();">PDF Download</button>
+        }
+    </div>
+
+    <div class="col-md-12 col-md-offset-3">
+        <h3>Meu PDF Zipado com o System.IO.Compression do C#</h3>
+
+        @using (Html.BeginForm("GetPdfFileZiped", "Home", FormMethod.Post, new { id = "pdfZipedForm", @class = "inline-form" }))
+        {
+            <button class="btn btn-primary m-t-10" type="button" onclick="$('#pdfZipedForm').submit();">PDF Download</button>
+        }
+    </div>
+</div>
