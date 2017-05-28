@@ -1,5 +1,6 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
+using iTextSharp.tool.xml;
 using System.IO;
 using System.IO.Compression;
 using System.Web.Mvc;
@@ -21,12 +22,14 @@ namespace Exemplo_PDF_e_ZIP.Controllers
             var doc = new Document(PageSize.A4.Rotate());
             var stream = new MemoryStream();
             var pw = PdfWriter.GetInstance(doc, stream);
-            var minhaStringHTML = @"<HTML><HEAD></HEAD><body><FORM method='post'><table><tr><td></td></tr></table></BODY></HTML>";
+            var minhaStringHTML = @"<HTML><HEAD></HEAD><body><FORM method='post'><table><tr><td>Nome:</td><td>JOÃO DA SILVA</td></tr><tr><td>NOME:</td><td>MARCOS ALVES</td></tr></table></FORM></BODY></HTML>";
 
             doc.Open();
-            Paragraph paragrafo = new Paragraph(minhaStringHTML, new Font(Font.NORMAL, 12));
-            paragrafo.Alignment = Element.ALIGN_LEFT;
-            doc.Add(paragrafo);
+            using (var srHtml = new StringReader(minhaStringHTML))
+            {
+                //Convertendo o HTML
+                XMLWorkerHelper.GetInstance().ParseXHtml(pw, doc, srHtml);
+            }
             doc.Close();
 
             return File(stream.ToArray(), "application/pdf", "result.pdf");
@@ -38,12 +41,14 @@ namespace Exemplo_PDF_e_ZIP.Controllers
             var doc = new Document(PageSize.A4.Rotate());
             var stream = new MemoryStream();
             var pw = PdfWriter.GetInstance(doc, stream);
-            var minhaStringHTML = @"<HTML><HEAD></HEAD><body><FORM method='post'><table><tr><td></td></tr></table></BODY></HTML>";
+            var minhaStringHTML = @"<HTML><HEAD></HEAD><body><FORM method='post'><table><tr><td>Nome:</td><td>JOÃO DA SILVA</td></tr><tr><td>NOME:</td><td>MARCOS ALVES</td></tr></table></FORM></BODY></HTML>";
 
             doc.Open();
-            Paragraph paragrafo = new Paragraph(minhaStringHTML, new Font(Font.NORMAL, 12));
-            paragrafo.Alignment = Element.ALIGN_LEFT;
-            doc.Add(paragrafo);
+            using (var srHtml = new StringReader(minhaStringHTML))
+            {
+                //Convertendo o HTML
+                XMLWorkerHelper.GetInstance().ParseXHtml(pw, doc, srHtml);
+            }
             doc.Close();
 
             using (var compressedFileStream = new MemoryStream())
@@ -63,9 +68,7 @@ namespace Exemplo_PDF_e_ZIP.Controllers
                             originalFileStream.CopyTo(zipEntryStream);
                         }
                     }
-
                 }
-
                 return new FileContentResult(compressedFileStream.ToArray(), "application/zip") { FileDownloadName = "Filename.zip" };
             }
         }
