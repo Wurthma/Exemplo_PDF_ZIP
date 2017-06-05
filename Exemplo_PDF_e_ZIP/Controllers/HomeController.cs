@@ -36,6 +36,28 @@ namespace Exemplo_PDF_e_ZIP.Controllers
         }
 
         [HttpPost]
+        public ActionResult OpenPdfFileInBrowser()
+        {
+            var doc = new Document(PageSize.A4.Rotate());
+            var stream = new MemoryStream();
+            var pw = PdfWriter.GetInstance(doc, stream);
+            var minhaStringHTML = @"<HTML><HEAD></HEAD><body><FORM method='post'><table><tr><td>Nome:</td><td>JOÃO DA SILVA</td></tr><tr><td>NOME:</td><td>MARCOS ALVES</td></tr></table></FORM></BODY></HTML>";
+
+            doc.Open();
+            using (var srHtml = new StringReader(minhaStringHTML))
+            {
+                //Convertendo o HTML
+                XMLWorkerHelper.GetInstance().ParseXHtml(pw, doc, srHtml);
+            }
+            doc.Close();
+
+            MemoryStream pdfStream = new MemoryStream();
+            pdfStream.Write(stream.ToArray(), 0, stream.ToArray().Length);
+            pdfStream.Position = 0;
+            return new FileStreamResult(pdfStream, "application/pdf");
+        }
+
+        [HttpPost]
         public ActionResult GetPdfFileZiped()
         {
             var doc = new Document(PageSize.A4.Rotate());

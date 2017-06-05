@@ -21,4 +21,13 @@
             <button class="btn btn-primary m-t-10" type="button" onclick="$('#pdfZipedForm').submit();">PDF Download</button>
         }
     </div>
+
+    <div class="col-md-12 col-md-offset-3">
+        <h3>Abrir PDF no navegador</h3>
+
+        @using (Html.BeginForm("OpenPdfFileInBrowser", "Home", FormMethod.Post, new { id = "pdfInBrowser", @class = "inline-form" }))
+        {
+            <button class="btn btn-primary m-t-10" type="button" onclick="$('#pdfInBrowser').submit();">PDF Download</button>
+        }
+    </div>
 </div>
