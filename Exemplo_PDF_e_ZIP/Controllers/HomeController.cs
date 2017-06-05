@@ -51,10 +51,12 @@ namespace Exemplo_PDF_e_ZIP.Controllers
             }
             doc.Close();
 
-            MemoryStream pdfStream = new MemoryStream();
-            pdfStream.Write(stream.ToArray(), 0, stream.ToArray().Length);
-            pdfStream.Position = 0;
-            return new FileStreamResult(pdfStream, "application/pdf");
+            using (MemoryStream pdfStream = new MemoryStream())
+            {
+                pdfStream.Write(stream.ToArray(), 0, stream.ToArray().Length);
+                pdfStream.Position = 0;
+                return new FileStreamResult(pdfStream, "application/pdf");
+            }
         }
 
         [HttpPost]
